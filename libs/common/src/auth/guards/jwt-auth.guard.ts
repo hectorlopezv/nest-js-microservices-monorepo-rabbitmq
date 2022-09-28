@@ -22,6 +22,10 @@ export class JwtAuthGuard implements CanActivate {
       })
       .pipe(
         tap((res) => {
+          console.log(
+            'respuesta del tap se supone que es la respuetsa del microservicio',
+            res,
+          );
           this.addUser(res, context);
         }),
         catchError(() => {
