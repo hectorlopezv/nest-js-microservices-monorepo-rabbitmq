@@ -12,12 +12,15 @@ export class OrdersService {
     @Inject(BILLING_SERIVCE)
     private readonly billingClient: ClientProxy,
   ) {}
-  async createOrder(request: createOrderRequest) {
+  async createOrder(request: createOrderRequest, authentication: string) {
     const session = await this.orderRepository.startTransaction();
     try {
       const order = await this.orderRepository.create(request, { session });
       await lastValueFrom(
-        this.billingClient.emit('order_created', { request }),
+        this.billingClient.emit('order_created', {
+          request,
+          Authentication: authentication,
+        }),
       );
       await session.commitTransaction();
       return order;
