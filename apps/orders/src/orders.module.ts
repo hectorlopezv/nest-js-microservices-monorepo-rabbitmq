@@ -1,8 +1,9 @@
-import { DatabaseModule } from '@app/common';
+import { DatabaseModule, RmqModule } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import Joi from 'joi';
+import { BILLING_SERIVCE } from './constants/services';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 import { OrderRepository } from './repositories/orders.repository';
@@ -18,6 +19,7 @@ import { orderSchema } from './schemas/orders.schema';
     }),
     DatabaseModule,
     MongooseModule.forFeature([{ name: 'Order', schema: orderSchema }]),
+    RmqModule.register({ name: BILLING_SERIVCE }),
   ],
   controllers: [OrdersController],
   providers: [OrdersService, OrderRepository],
